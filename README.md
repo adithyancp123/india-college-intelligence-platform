@@ -12,18 +12,18 @@ The platform separates high-performance fuzzy catalog querying from document com
 
 ```mermaid
 graph TD
-    User([User Client]) --> Dashboard[Dashboard console /dashboard]
-    User --> Planner[Dream/Safe/Reach Planner /planner]
-    User --> ReportUI[Report Desk /report]
+    User(["User Client"]) --> Dashboard["Dashboard Console (/dashboard)"]
+    User --> Planner["Planner (/planner)"]
+    User --> ReportUI["Report UI (/report)"]
     
-    Dashboard -- Quick Actions --> Planner
-    Dashboard -- Download Report --> ReportUI
-    Planner -- Export Portfolio --> ReportUI
+    Dashboard -- "Quick Actions" --> Planner
+    Dashboard -- "Download Report" --> ReportUI
+    Planner -- "Export Portfolio" --> ReportUI
     
-    ReportUI -- Trigger PDF Download (POST Data) --> ReportAPI[/api/report]
-    ReportAPI -- Spawn Child Process --> PythonScript[python scripts/generate_report.py]
-    PythonScript -- Build PDF via ReportLab --> ReportAPI
-    ReportAPI -- Stream Binary Stream --> User
+    ReportUI -- "Trigger PDF Download (POST Data)" --> ReportAPI["Report API (/api/report)"]
+    ReportAPI -- "Spawn Child Process" --> PythonScript["Python Report Generator (scripts/generate_report.py)"]
+    PythonScript -- "Build PDF via ReportLab" --> ReportAPI
+    ReportAPI -- "Stream Binary Stream" --> User
 ```
 
 ---
