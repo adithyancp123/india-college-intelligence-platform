@@ -1,0 +1,103 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id               String            @id @default(uuid())
+  email            String            @unique
+  name             String
+  password         String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  reviews          Review[]
+  savedColleges    SavedCollege[]
+  savedComparisons SavedComparison[]
+}
+
+model College {
+  id                       String         @id @default(uuid())
+  name                     String
+  location                 String
+  state                    String         @default("")
+  city                     String         @default("")
+  ownership                String         @default("Private") // "Government" | "Private"
+  nirfRank                 Int?
+  fees                     Int            // Annual fee in INR
+  rating                   Float          // Overall rating (out of 5)
+  description              String
+  established              Int
+  logoUrl                  String
+  bannerUrl                String
+  placementRate            Float          // Placement percentage (e.g. 94.5)
+  averagePackage           Float          // Average Package in LPA (e.g. 12.5)
+  highestPackage           Float          // Highest Package in LPA (e.g. 45.0)
+  accreditation            String?        // e.g. "NAAC A++"
+  website                  String?
+  exams                    String[]       // e.g. ["JEE Main", "JEE Advanced"]
+  facilities               String[]       // e.g. ["Hostel", "Gym", "Wifi"]
+  collegeIntelligenceScore Float          @default(75.0)
+  roiScore                 Float          @default(1.0)
+  scholarshipFriendly      Boolean        @default(false)
+  trending                 Boolean        @default(false)
+  syncSource               String         @default("Local Dataset")
+  syncLastUpdated          DateTime       @default(now())
+  syncConfidenceScore      Float          @default(90.0)
+  syncMissingFields        String[]       @default([])
+  createdAt                DateTime       @default(now())
+  updatedAt                DateTime       @updatedAt
+  courses                  Course[]
+  reviews                  Review[]
+  savedBy                  SavedCollege[]
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  name        String
+  duration    Int      // Duration in years
+  fees        Int      // Course annual fees
+  seats       Int
+  cutoffRank  Int      @default(10000)
+  exam        String   @default("JEE Main")
+  collegeId   String
+  college     College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  rating    Float    // Rating (1-5)
+  comment   String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  collegeId String
+  college   College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, collegeId])
+}
+
+model SavedCollege {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  collegeId String
+  college   College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, collegeId])
+}
+
+model SavedComparison {
+  id         String   @id @default(uuid())
+  name       String
+  collegeIds String[] // Array of college IDs to compare
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+}

@@ -39,3 +39,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/src/generated/prisma
+
+# fallback database
+prisma/fallback-db.json
+
+# generated reports
+*.pdf
+Student_College_Intelligence_Report*.pdf
+Strategic_College_Intelligence_Report*.pdf
+
+# caches
+/cache/
+/cache/*.json
+.eslintcache
+
