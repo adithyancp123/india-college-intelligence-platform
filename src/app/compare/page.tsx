@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/context/AppContext';
 import { GitCompare, Plus, Trash2, Bookmark, Save, X, ArrowRight, Star, MapPin, IndianRupee, Briefcase, Award, Sparkles, TrendingUp, Info } from 'lucide-react';
+import { getSafeLogoSrc, getFallbackLogoUrl } from '@/lib/image-mapper';
 import Link from 'next/link';
 
 export default function ComparePage() {
@@ -210,13 +211,13 @@ export default function ComparePage() {
 
         {/* Empty State / Select College to Start */}
         {comparisonColleges.length === 0 ? (
-          <div className="mt-12 text-center rounded-2xl border border-dashed border-[#2A2A40] bg-[#151521]/30 p-16 backdrop-blur-sm animate-fade-in">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#151521] border border-[#2A2A40] text-[#B0B0C0] animate-bounce">
-              <GitCompare className="h-8 w-8 text-[#8B5CF6]" />
+          <div className="mt-12 text-center rounded-2xl border border-dashed border-[#2A2A40]/80 bg-[#151521]/30 p-16 backdrop-blur-md animate-fade-in flex flex-col items-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 text-[#8B5CF6] mb-4">
+              <GitCompare className="h-6 w-6" />
             </div>
-            <h3 className="mt-4 text-lg font-bold text-[#F5F5F5]">No Colleges Selected</h3>
-            <p className="mt-2 text-xs text-[#B0B0C0] max-w-sm mx-auto leading-relaxed">
-              Select 2 to 3 colleges from the Discover page or search for them below to start comparing.
+            <h3 className="text-base font-extrabold text-[#F5F5F5]">Create Side-by-Side Evaluations</h3>
+            <p className="mt-2 text-xs text-[#B0B0C0]/85 max-w-sm leading-relaxed font-light">
+              Select 2 to 3 colleges from the directory or search for them below to compare ROI metrics, annual fees, and average placement salary packages.
             </p>
             
             {/* Quick Add search */}
@@ -245,7 +246,15 @@ export default function ComparePage() {
                       onClick={() => handleAddCollege(result)}
                       className="w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-xs text-[#B0B0C0] hover:bg-[#2A2A40]/40 hover:text-[#F5F5F5] text-left transition-colors cursor-pointer"
                     >
-                      <img src={result.logoUrl} alt="" className="h-7 w-7 rounded object-cover border border-[#2A2A40]" />
+                      <img 
+                        src={getSafeLogoSrc(result)} 
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = getFallbackLogoUrl();
+                        }}
+                        alt="" 
+                        className="h-7 w-7 rounded object-cover object-center border border-[#2A2A40]" 
+                      />
                       <div>
                         <div className="font-semibold">{result.name}</div>
                         <div className="text-[9px] text-[#B0B0C0]/50 mt-0.5">{result.location}</div>
@@ -299,7 +308,15 @@ export default function ComparePage() {
                         onClick={() => handleAddCollege(result)}
                         className="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-xs text-[#B0B0C0] hover:bg-[#2A2A40]/40 hover:text-[#F5F5F5] text-left transition-all cursor-pointer"
                       >
-                        <img src={result.logoUrl} alt="" className="h-7 w-7 rounded object-cover border border-[#2A2A40]" />
+                        <img 
+                          src={getSafeLogoSrc(result)} 
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = getFallbackLogoUrl();
+                          }}
+                          alt="" 
+                          className="h-7 w-7 rounded object-cover object-center border border-[#2A2A40]" 
+                        />
                         <div>
                           <div className="font-semibold">{result.name}</div>
                           <div className="text-[9px] text-[#B0B0C0]/50 mt-0.5">{result.location}</div>
@@ -349,11 +366,15 @@ export default function ComparePage() {
                         </button>
                         
                         <div className="flex flex-col items-center text-center mt-2">
-                          <img
-                            src={college.logoUrl}
-                            alt=""
-                            className="h-12 w-12 rounded-xl object-cover border border-[#2A2A40] bg-[#0A0A0F] shadow"
-                          />
+                           <img
+                             src={getSafeLogoSrc(college)}
+                             onError={(e) => {
+                               e.currentTarget.onerror = null;
+                               e.currentTarget.src = getFallbackLogoUrl();
+                             }}
+                             alt=""
+                             className="h-12 w-12 rounded-xl object-cover object-center border border-[#2A2A40] bg-[#0A0A0F] shadow"
+                           />
                           <h4 className="mt-3 font-extrabold text-[#F5F5F5] line-clamp-2">
                             {college.name}
                           </h4>

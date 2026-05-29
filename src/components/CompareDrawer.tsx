@@ -4,6 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/context/AppContext';
 import { X, GitCompare, Trash2 } from 'lucide-react';
+import { getSafeLogoSrc, getFallbackLogoUrl } from '@/lib/image-mapper';
 
 export default function CompareDrawer() {
   const router = useRouter();
@@ -35,9 +36,13 @@ export default function CompareDrawer() {
               className="flex items-center gap-2 rounded-full bg-[#0A0A0F] border border-[#2A2A40] pl-2 pr-3 py-1 text-xs text-[#F5F5F5] shadow-sm hover:border-[#8B5CF6]/40 transition-colors"
             >
               <img
-                src={college.logoUrl}
+                src={getSafeLogoSrc(college)}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = getFallbackLogoUrl();
+                }}
                 alt={college.name}
-                className="h-5 w-5 rounded-full object-cover border border-[#2A2A40]"
+                className="h-5 w-5 rounded-full object-cover object-center border border-[#2A2A40]"
               />
               <span className="max-w-[120px] truncate font-medium">{college.name}</span>
               <button

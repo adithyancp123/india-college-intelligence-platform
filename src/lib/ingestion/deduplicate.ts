@@ -18,15 +18,6 @@ export function standardizeCollegeName(name: string): string {
     .replace(/\bnit\b/g, 'national institute of technology')
     .replace(/\biiit\b/g, 'indian institute of information technology')
     .replace(/\bbits\b/g, 'birla institute of technology and science')
-    .replace(/\buniversity\b/g, '')
-    .replace(/\bcollege\b/g, '')
-    .replace(/\binstitute\b/g, '')
-    .replace(/\btechnology\b/g, '')
-    .replace(/\bscience\b/g, '')
-    .replace(/\bengineering\b/g, '')
-    .replace(/\bmanagement\b/g, '')
-    .replace(/\bof\b/g, '')
-    .replace(/\band\b/g, '')
     .replace(/\s+/g, '')
     .trim();
 }
@@ -124,7 +115,7 @@ export function deduplicateColleges(colleges: IngestionCollege[]): IngestionColl
         if (stdName.length > 5 && existingStdName.length > 5) {
           const dist = getLevenshteinDistance(stdName, existingStdName);
           const maxLen = Math.max(stdName.length, existingStdName.length);
-          if (1 - dist / maxLen >= 0.85) {
+          if (1 - dist / maxLen >= 0.90) {
             isDuplicate = true;
             result[i] = mergeColleges(existing, item);
             break;

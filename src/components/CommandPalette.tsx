@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, Command, X, Sparkles, GitCompare, GraduationCap, ArrowRight, User, MapPin } from 'lucide-react';
+import { getSafeLogoSrc, getFallbackLogoUrl } from '@/lib/image-mapper';
 
 export default function CommandPalette() {
   const router = useRouter();
@@ -179,9 +180,13 @@ export default function CommandPalette() {
                       >
                         <div className="flex items-center gap-3">
                           <img
-                            src={col.logoUrl}
+                            src={getSafeLogoSrc(col)}
+                            onError={(e) => {
+                              e.currentTarget.onerror = null;
+                              e.currentTarget.src = getFallbackLogoUrl();
+                            }}
                             alt=""
-                            className="h-8 w-8 rounded-lg object-cover border border-[#2A2A40]"
+                            className="h-8 w-8 rounded-lg object-cover object-center border border-[#2A2A40]"
                           />
                           <div>
                             <div className="font-semibold text-xs text-[#F5F5F5]">{col.name}</div>

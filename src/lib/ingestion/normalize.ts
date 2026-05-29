@@ -1,4 +1,5 @@
 import { College, Course } from '../mock-data';
+import { getCollegeImages } from '../image-mapper';
 
 export const STATE_MAP: { [key: string]: string } = {
   'MH': 'Maharashtra',
@@ -179,8 +180,12 @@ export function normalizeCollege(raw: any): Partial<College> & {
     rating,
     description: raw.description || `Established in ${established}, ${name} offers top-tier academic and professional programs.`,
     established,
-    logoUrl: raw.logoUrl || 'https://images.unsplash.com/photo-1592280771190-3e2e4d571952?w=128&h=128&fit=crop&q=80',
-    bannerUrl: raw.bannerUrl || 'https://images.unsplash.com/photo-1562774053-701939374585?w=1200&h=400&fit=crop&q=80',
+    logoUrl: (!raw.logoUrl || raw.logoUrl.includes('photo-1592280771190-3e2e4d571952') || raw.logoUrl.includes('photo-1541339907198-e08756dedf3f'))
+      ? getCollegeImages(raw.id || '', name, exams).logoUrl
+      : raw.logoUrl,
+    bannerUrl: (!raw.bannerUrl || raw.bannerUrl.includes('photo-1562774053-701939374585') || raw.bannerUrl.includes('photo-1523050854058-8df90110c9f1') || raw.bannerUrl.includes('photo-1498243691581-b145c3f54a5c'))
+      ? getCollegeImages(raw.id || '', name, exams).bannerUrl
+      : raw.bannerUrl,
     placementRate,
     averagePackage,
     highestPackage,

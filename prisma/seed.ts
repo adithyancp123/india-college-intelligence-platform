@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
+import { getCollegeImages } from '../src/lib/image-mapper';
 
 const connectionString = process.env.DATABASE_URL;
 
@@ -206,7 +207,14 @@ async function main() {
   ];
 
   for (const college of collegesData) {
-    await prisma.college.create({ data: college });
+    const images = getCollegeImages(college.id, college.name);
+    await prisma.college.create({
+      data: {
+        ...college,
+        logoUrl: images.logoUrl,
+        bannerUrl: images.bannerUrl
+      }
+    });
   }
 
   console.log('Creating courses...');

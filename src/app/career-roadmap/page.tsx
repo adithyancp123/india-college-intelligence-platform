@@ -252,11 +252,13 @@ export default function CareerRoadmapPage() {
                 ))}
               </div>
             ) : (
-              <div className="rounded-2xl border border-dashed border-[#2A2A40] bg-[#151521]/10 p-12 text-center flex flex-col items-center justify-center space-y-4 h-96 select-none">
-                <GraduationCap className="h-16 w-16 text-[#B0B0C0]/20" />
-                <h3 className="text-base font-bold text-[#F5F5F5]">No Career Roadmap Generated</h3>
-                <p className="text-xs text-[#B0B0C0] max-w-sm leading-relaxed">
-                  Enter your target college and technology career goal in the advisor settings, and click **"Compile AI Roadmap"** to generate your academic and portfolio roadmap.
+              <div className="rounded-2xl border border-dashed border-[#2A2A40]/80 bg-[#151521]/10 p-12 text-center flex flex-col items-center justify-center space-y-4 h-96 select-none backdrop-blur-md animate-fade-in">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 text-[#8B5CF6]">
+                  <Sparkles className="h-6 w-6 shrink-0" />
+                </div>
+                <h3 className="text-base font-extrabold text-[#F5F5F5]">Generate a personalized roadmap to accelerate your career</h3>
+                <p className="text-xs text-[#B0B0C0]/85 max-w-sm leading-relaxed font-light">
+                  Input your matching college selection and target professional goals to generate custom 4-year timelines listing essential projects, certifications, and expected LPA benchmarks.
                 </p>
               </div>
             )}

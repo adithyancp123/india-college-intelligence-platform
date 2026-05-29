@@ -4,6 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp, College } from '@/context/AppContext';
 import { 
+  getSafeLogoSrc, 
+  getSafeBannerSrc, 
+  getFallbackLogoUrl, 
+  getFallbackBannerUrl 
+} from '@/lib/image-mapper';
+import { 
   Bookmark, 
   GitCompare, 
   Trash2, 
@@ -583,17 +589,19 @@ export default function DashboardPage() {
             <div className="mt-4">
               {activeTab === 'colleges' ? (
                 savedColleges.length === 0 ? (
-                  <div className="rounded-2xl border border-dashed border-[#2A2A40] bg-[#151521]/30 p-12 text-center backdrop-blur-sm animate-fade-in">
-                    <Bookmark className="mx-auto h-12 w-12 text-neutral-600" />
-                    <h4 className="mt-4 text-lg font-bold text-[#F5F5F5]">No Saved Colleges</h4>
-                    <p className="mt-2 text-xs text-[#B0B0C0] max-w-sm mx-auto font-light leading-relaxed">
-                      Bookmark colleges on the Discover listing page to view them here.
+                  <div className="rounded-2xl border border-dashed border-[#2A2A40]/80 bg-[#151521]/30 p-12 text-center backdrop-blur-md animate-fade-in flex flex-col items-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 text-[#8B5CF6] mb-4">
+                      <Bookmark className="h-6 w-6" />
+                    </div>
+                    <h4 className="text-base font-extrabold text-[#F5F5F5]">Start building your dream college portfolio</h4>
+                    <p className="mt-2 text-xs text-[#B0B0C0]/80 max-w-xs mx-auto font-light leading-relaxed">
+                      Bookmark campuses on the Discover listing catalog to build a secure portfolio and analyze admissions paths.
                     </p>
                     <Link
                       href="/"
-                      className="mt-6 inline-flex items-center gap-1 bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] hover:opacity-90 text-white rounded-lg px-4.5 py-2.5 text-xs font-bold shadow-md transition-colors"
+                      className="mt-6 inline-flex items-center gap-1.5 bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] hover:opacity-90 text-white rounded-xl px-5 py-2.5 text-xs font-extrabold shadow-md shadow-purple-500/10 transition-all hover:scale-[1.01] active:scale-95"
                     >
-                      Start Saving
+                      Explore College Directory
                     </Link>
                   </div>
                 ) : (
@@ -601,10 +609,18 @@ export default function DashboardPage() {
                     {savedColleges.map((college: any) => (
                       <div
                         key={college.id}
-                        className="group flex flex-col overflow-hidden rounded-2xl border border-[#2A2A40]/80 bg-[#151521]/50 shadow-sm hover:border-[#8B5CF6]/50 hover:shadow-purple-500/5 transition-all backdrop-blur-sm animate-fade-in hover-lift"
+                        className="group flex flex-col overflow-hidden rounded-2xl border border-[#2A2A40]/80 bg-[#151521]/50 shadow-sm hover:border-[#8B5CF6]/50 hover:shadow-[0_0_15px_rgba(139,92,246,0.15)] transition-all duration-300 backdrop-blur-sm animate-fade-in hover-lift"
                       >
-                        <div className="relative h-32 bg-[#0A0A0F]">
-                          <img src={college.bannerUrl} alt="" className="h-full w-full object-cover opacity-70" />
+                        <div className="relative h-32 bg-[#0A0A0F] overflow-hidden">
+                           <img 
+                             src={getSafeBannerSrc(college)} 
+                             onError={(e) => {
+                               e.currentTarget.onerror = null;
+                               e.currentTarget.src = getFallbackBannerUrl(college.name, college.exams);
+                             }}
+                             alt="" 
+                             className="h-full w-full object-cover object-center opacity-70 transition-transform duration-500 group-hover:scale-105" 
+                           />
                           <button
                             onClick={() => handleUnsaveCollege(college.id)}
                             className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-[#0A0A0F]/80 text-[#B0B0C0] hover:text-red-400 border border-[#2A2A40] hover:scale-105 active:scale-95 transition-all cursor-pointer"
@@ -653,17 +669,19 @@ export default function DashboardPage() {
                 )
               ) : activeTab === 'comparisons' ? (
                 comparisons.length === 0 ? (
-                  <div className="rounded-2xl border border-dashed border-[#2A2A40] bg-[#151521]/30 p-12 text-center backdrop-blur-sm animate-fade-in">
-                    <GitCompare className="mx-auto h-12 w-12 text-neutral-600" />
-                    <h4 className="mt-4 text-lg font-bold text-[#F5F5F5]">No Saved Comparisons</h4>
-                    <p className="mt-2 text-xs text-[#B0B0C0] max-w-sm mx-auto leading-relaxed font-light">
-                      Compare 2-3 colleges side-by-side and click "Save Comparison" to bookmark your comparison profiles.
+                  <div className="rounded-2xl border border-dashed border-[#2A2A40]/80 bg-[#151521]/30 p-12 text-center backdrop-blur-md animate-fade-in flex flex-col items-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 mb-4">
+                      <GitCompare className="h-6 w-6" />
+                    </div>
+                    <h4 className="text-base font-extrabold text-[#F5F5F5]">Create side-by-side college evaluations</h4>
+                    <p className="mt-2 text-xs text-[#B0B0C0]/80 max-w-xs mx-auto leading-relaxed font-light">
+                      Compare 2-3 institutions side-by-side across ROI scores, cutoffs, and verified placement benchmarks, then save them.
                     </p>
                     <Link
                       href="/compare"
-                      className="mt-6 inline-flex items-center gap-1 bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] hover:opacity-90 text-white rounded-lg px-4.5 py-2.5 text-xs font-bold shadow-md transition-colors"
+                      className="mt-6 inline-flex items-center gap-1.5 bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] hover:opacity-90 text-white rounded-xl px-5 py-2.5 text-xs font-extrabold shadow-md shadow-purple-500/10 transition-all hover:scale-[1.01] active:scale-95"
                     >
-                      Go to Compare
+                      Launch Comparison Matrix
                     </Link>
                   </div>
                 ) : (
@@ -703,17 +721,19 @@ export default function DashboardPage() {
                 )
               ) : (
                 predictorHistory.length === 0 ? (
-                  <div className="rounded-2xl border border-dashed border-[#2A2A40] bg-[#151521]/30 p-12 text-center backdrop-blur-sm animate-fade-in">
-                    <Sliders className="mx-auto h-12 w-12 text-neutral-600 animate-pulse" />
-                    <h4 className="mt-4 text-lg font-bold text-[#F5F5F5]">No Prediction History</h4>
-                    <p className="mt-2 text-xs text-[#B0B0C0] max-w-sm mx-auto font-light leading-relaxed">
-                      Run the admissions predictor wizard to see your rank evaluations here.
+                  <div className="rounded-2xl border border-dashed border-[#2A2A40]/80 bg-[#151521]/30 p-12 text-center backdrop-blur-md animate-fade-in flex flex-col items-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 mb-4">
+                      <Sliders className="h-6 w-6" />
+                    </div>
+                    <h4 className="text-base font-extrabold text-[#F5F5F5]">Benchmark your scores against cutoff matrices</h4>
+                    <p className="mt-2 text-xs text-[#B0B0C0]/80 max-w-xs mx-auto font-light leading-relaxed">
+                      Run the Admissions Predictor wizard using your actual exam ranks to map target, stretch, and safe outcomes.
                     </p>
                     <Link
                       href="/college-predictor"
-                      className="mt-6 inline-flex items-center gap-1 bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] hover:opacity-90 text-white rounded-lg px-4.5 py-2.5 text-xs font-bold shadow-md transition-colors"
+                      className="mt-6 inline-flex items-center gap-1.5 bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] hover:opacity-90 text-white rounded-xl px-5 py-2.5 text-xs font-extrabold shadow-md shadow-purple-500/10 transition-all hover:scale-[1.01] active:scale-95"
                     >
-                      Predict Admissions
+                      Predict College Fits
                     </Link>
                   </div>
                 ) : (
@@ -849,7 +869,15 @@ export default function DashboardPage() {
                         className="group p-3 rounded-xl border border-[#2A2A40]/40 bg-[#0A0A0F]/20 hover:border-[#8B5CF6]/40 hover:bg-[#151521]/40 transition-all cursor-pointer space-y-2.5"
                       >
                         <div className="flex gap-3">
-                          <img src={col.logoUrl} alt="" className="h-9 w-9 rounded-lg object-cover border border-[#2A2A40]" />
+                          <img 
+                         src={getSafeLogoSrc(col)} 
+                         onError={(e) => {
+                           e.currentTarget.onerror = null;
+                           e.currentTarget.src = getFallbackLogoUrl();
+                         }}
+                         alt="" 
+                         className="h-9 w-9 rounded-lg object-cover object-center border border-[#2A2A40]" 
+                       />
                           <div className="overflow-hidden flex-1">
                             <h5 className="font-bold text-[11px] text-[#F5F5F5] truncate group-hover:text-[#8B5CF6] transition-colors">{col.name}</h5>
                             <div className="flex justify-between items-center text-[9px] text-[#B0B0C0] mt-0.5 font-light">
@@ -920,7 +948,15 @@ export default function DashboardPage() {
                       onClick={() => router.push(`/college/${col.id}`)}
                       className="group flex gap-3 p-2.5 rounded-xl border border-[#2A2A40]/40 bg-[#0A0A0F]/20 hover:border-[#8B5CF6]/30 hover:bg-[#151521]/40 transition-all cursor-pointer"
                     >
-                      <img src={col.logoUrl} alt="" className="h-9 w-9 rounded-lg object-cover border border-[#2A2A40]" />
+                      <img 
+                        src={getSafeLogoSrc(col)} 
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = getFallbackLogoUrl();
+                        }}
+                        alt="" 
+                        className="h-9 w-9 rounded-lg object-cover object-center border border-[#2A2A40]" 
+                      />
                       <div className="overflow-hidden flex-1">
                         <h5 className="font-bold text-[11px] text-[#F5F5F5] truncate group-hover:text-[#8B5CF6] transition-colors">{col.name}</h5>
                         <p className="text-[9px] text-[#B0B0C0]/50 mt-0.5 truncate font-light">{col.location}</p>

@@ -436,15 +436,6 @@ function standardizeCollegeName(name: string): string {
     .replace(/\bnit\b/g, 'national institute of technology')
     .replace(/\biiit\b/g, 'indian institute of information technology')
     .replace(/\bbits\b/g, 'birla institute of technology and science')
-    .replace(/\buniversity\b/g, '')
-    .replace(/\bcollege\b/g, '')
-    .replace(/\binstitute\b/g, '')
-    .replace(/\btechnology\b/g, '')
-    .replace(/\bscience\b/g, '')
-    .replace(/\bengineering\b/g, '')
-    .replace(/\bmanagement\b/g, '')
-    .replace(/\bof\b/g, '')
-    .replace(/\band\b/g, '')
     .replace(/\s+/g, '')
     .trim();
 }

@@ -57,11 +57,21 @@ export default function ScholarshipsPage() {
     sch.eligibility.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const resetFilters = () => {
+    setState('All States');
+    setCategory('General');
+    setIncome(600000);
+    setGender('Male');
+    setExamScore(85);
+    setMatches(SCHOLARSHIPS_DATA);
+    setSearchQuery('');
+  };
+
   return (
     <div className="min-h-screen bg-[#0A0A0F] text-[#F5F5F5] py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Glow Ambient Backdrop */}
-      <div className="absolute top-[-10%] right-[-5%] bg-glow-purple"></div>
-      <div className="absolute bottom-[-10%] left-[-5%] bg-glow-purple" style={{ animationDelay: '-3s' }}></div>
+      <div className="absolute top-[-100px] right-[-5%] bg-glow-purple"></div>
+      <div className="absolute bottom-[-100px] left-[-5%] bg-glow-purple" style={{ animationDelay: '-3s' }}></div>
 
       <div className="mx-auto max-w-7xl space-y-8 relative z-10 animate-fade-in">
         
@@ -276,18 +286,25 @@ export default function ScholarshipsPage() {
                 })}
               </div>
             ) : (
-              <div className="rounded-2xl border border-dashed border-[#2A2A40] bg-[#151521]/10 p-12 text-center flex flex-col items-center justify-center space-y-4 h-96 select-none">
-                <ShieldAlert className="h-16 w-16 text-amber-500/20" />
-                <h3 className="text-base font-bold text-[#F5F5F5]">No Matching Schemes Located</h3>
-                <p className="text-xs text-[#B0B0C0] max-w-sm leading-relaxed">
-                  We couldn't locate any scholarships matching your currently set eligibility metrics. Try adjusting your domicile selection, category limits, or lowering the household income limit slider.
+              <div className="rounded-2xl border border-dashed border-[#2A2A40]/85 bg-[#151521]/10 p-12 text-center flex flex-col items-center justify-center space-y-4 h-96 select-none backdrop-blur-md animate-fade-in">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400">
+                  <Award className="h-6 w-6" />
+                </div>
+                <h3 className="text-base font-extrabold text-[#F5F5F5]">No Matching Schemes Located</h3>
+                <p className="text-xs text-[#B0B0C0]/85 max-w-sm leading-relaxed font-light">
+                  We couldn't locate any scholarships matching your currently set eligibility metrics. Try adjusting domicile state filters or changing category income boundaries.
                 </p>
+                <button
+                  onClick={resetFilters}
+                  className="mt-4 rounded-xl bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] px-6 py-2.5 text-xs font-extrabold text-white shadow shadow-purple-500/10 hover:opacity-90 active:scale-95 transition-all cursor-pointer"
+                >
+                  Reset Eligibility Criteria
+                </button>
               </div>
             )}
           </div>
 
         </div>
-
       </div>
     </div>
   );

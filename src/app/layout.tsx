@@ -6,6 +6,8 @@ import Navbar from '@/components/Navbar';
 import CompareDrawer from '@/components/CompareDrawer';
 import CommandPalette from '@/components/CommandPalette';
 
+import Footer from '@/components/Footer';
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -37,16 +39,7 @@ export default function RootLayout({
           <main className="flex-1 flex flex-col">{children}</main>
           <CompareDrawer />
           <CommandPalette />
-          
-          {/* Footer */}
-          <footer className="border-t border-[#2A2A40] bg-[#151521]/60 py-8 text-center text-sm text-[#B0B0C0] mt-auto pb-24 md:pb-8 backdrop-blur-md">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <p>&copy; {new Date().getFullYear()} CollegeHub. All rights reserved. Created for Assignment Showcase.</p>
-              <p className="mt-2 text-xs text-[#B0B0C0]/60">
-                Built with Next.js App Router, TypeScript, TailwindCSS, Prisma, and PostgreSQL.
-              </p>
-            </div>
-          </footer>
+          <Footer />
         </AppProvider>
       </body>
     </html>
